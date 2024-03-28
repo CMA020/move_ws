@@ -46,7 +46,7 @@ cur_pos = [0, 0, 0, 0, 0]
 pos = [0, 0, 0, 0, 0]
 joint_state_pub = rospy.Publisher('/joint_states', JointState, queue_size=10)
 rate = rospy.Rate(10)
-file_path = os.path.expanduser("~/catkin_ws/src/urdf_config8/script/joint_values.txt")
+file_path = os.path.expanduser("~/move_ws/src/urdf_config8/script/joint_values.txt")
 flag=0
 
 
@@ -190,6 +190,15 @@ def joint_state_callback():
             #print(pos ,"posa")
             file.write(str(list_joint_values))
             #file.write(str(pos))
+        pub.publish(goal)
+        rospy.sleep(13)
+        goal = ArmJointState()
+        goal.position1 = int((1000 / 0.384) * (cur_pos[4]))
+        goal.position2 = int((-4000 / 0.63) * (cur_pos[2]))  ##multiply by 10 in ard
+        goal.position3 = int((4000 / 0.23) * (cur_pos[1]))
+        goal.position4 = int((3000 / 0.58) * (cur_pos[0]))
+        goal.position5 = int((6000 / 1.57) * (cur_pos[3]))
+        goal.position6 = 0
         pub.publish(goal)
         rospy.sleep(13)
         user_input = input("Enter 'q' to quit or press Enter to continue: ")
